@@ -21,8 +21,8 @@ function Report(): JSX.Element {
     getData();
   }, []);
 
-  const SVG_WIDTH = 400;
-  const SVG_HEIGHT = 300;
+  const SVG_WIDTH = 556;
+  const SVG_HEIGHT = 160;
 
   return (
     <Wrapper>
@@ -40,26 +40,36 @@ function Report(): JSX.Element {
             </Start>
           </Info>
           <LineGraph>
-            {data.map((info) => {
-              return (
-                <svg
-                  key={info.cycle}
-                  width={SVG_WIDTH}
-                  height={SVG_HEIGHT}
-                ></svg>
-              );
-            })}
+            <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
+              {data.map((info) => {
+                return (
+                  <>
+                    <GraphLine x1={1} y1={1} x2={1} y2={1} />
+                    <GraphCircle cx={1} cy={1} r="4.5" />
+                  </>
+                );
+              })}
+            </svg>
           </LineGraph>
           <BarGraph>
-            {data.map((info) => {
-              return (
-                <svg
-                  key={info.cycle}
-                  width={SVG_WIDTH}
-                  height={SVG_HEIGHT}
-                ></svg>
-              );
-            })}
+            <svg>
+              {data.map((info) => {
+                const { startDate, endDate, period, cycle } = info;
+                return (
+                  <BarWrapper>
+                    <BarContainer />
+                    <Bar>
+                      <PeriodWrapper>
+                        <Period>{cycle + "일"}</Period>
+                      </PeriodWrapper>
+                    </Bar>
+                    <DateWrapper>
+                      <Date>{startDate}</Date>
+                    </DateWrapper>
+                  </BarWrapper>
+                );
+              })}
+            </svg>
           </BarGraph>
         </Chart>
       </Container>
@@ -137,5 +147,59 @@ const LineGraph = styled.div`
 `;
 
 const BarGraph = styled.div`
+  display: flex;
   margin-top: 40px;
+  padding-left: 46.5px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
+const GraphLine = styled.line`
+  stroke: rgb(34, 34, 34);
+  stroke-width: 2;
+`;
+
+const GraphCircle = styled.circle`
+  fill: rgb(34, 34, 34);
+`;
+
+const BarWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  width: 93px;
+`;
+
+const BarContainer = styled.div`
+  height: 73px;
+  width: 30px;
+`;
+
+const Bar = styled.div`
+  border-radius: 10px;
+  height: 27px;
+  width: 33px;
+  background-color: rgb(51, 51, 51);
+`;
+
+const PeriodWrapper = styled.div`
+  margin-top: -23px;
+  text-align: center;
+`;
+
+const Period = styled.span`
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: rgb(85, 85, 85);
+`;
+
+const DateWrapper = styled.div`
+  margin-top: 5px;
+`;
+
+const Date = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(85, 85, 85);
 `;
