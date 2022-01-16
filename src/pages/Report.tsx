@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+import LineGraph from "../components/LineGraph";
+import BarChart from "../components/BarChart";
+import Bar from "../components/Bar";
 import styled from "styled-components";
 
-interface data {
+export interface data {
   startDate: string;
   endDate: string;
   period: number;
@@ -10,6 +13,34 @@ interface data {
 
 function Report(): JSX.Element {
   const [data, setData] = useState<data[]>([]);
+  const [lineGraphData, setLineGraphData] = useState<any>([]);
+  const [longestPeriod, setLongestPeriod] = useState<number>(0);
+
+  const calculateLongestPeriod = (data: data[]) =>
+    data.reduce((acc, cur) => {
+      const { period } = cur;
+      return period > acc ? period : acc;
+    }, 0);
+
+  const calculateLongestCycle = (data: data[]) =>
+    data.reduce((acc, cur) => {
+      const { cycle } = cur;
+      return cycle > acc ? cycle : acc;
+    }, 0);
+
+  const makeLineGraphData = (data: data[]) => {
+    const longestCycle = calculateLongestCycle(data);
+
+    const arr = data.map((info: any, index) => {
+      const lineHeight = (info.cycle / longestCycle) * 80;
+      const chartHeight = 80;
+      return {
+        x: index * 100 + 30,
+        y: chartHeight - lineHeight,
+      };
+    });
+    setLineGraphData(arr);
+  };
 
   const getData = () => {
     fetch(`https://motionz-kr.github.io/playground/apis/report.json`)
@@ -21,14 +52,16 @@ function Report(): JSX.Element {
     getData();
   }, []);
 
-  const SVG_WIDTH = 556;
-  const SVG_HEIGHT = 160;
+  useEffect(() => {
+    setLongestPeriod(calculateLongestPeriod(data));
+    makeLineGraphData(data);
+  }, [data]);
 
   return (
     <Wrapper>
       <Container>
         <Title>User Report</Title>
-        <Chart>
+        <Charts>
           <Info>
             <Cycle>
               <Dot />
@@ -39,39 +72,33 @@ function Report(): JSX.Element {
               <Description>활동 기간, 시작일</Description>
             </Start>
           </Info>
-          <LineGraph>
-            <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
-              {data.map((info) => {
-                return (
-                  <>
-                    <GraphLine x1={1} y1={1} x2={1} y2={1} />
-                    <GraphCircle cx={1} cy={1} r="4.5" />
-                  </>
-                );
-              })}
-            </svg>
-          </LineGraph>
+          <LineGraphWrapper>
+            <LineGraph points={lineGraphData} data={data} />
+          </LineGraphWrapper>
           <BarGraph>
-            <svg>
-              {data.map((info) => {
-                const { startDate, endDate, period, cycle } = info;
+            <BarChart height={123} width={556}>
+              {data.map((info, index) => {
+                const chartHeight = 100;
+                const barWidth = 30;
+                const barMargin = 78;
+                const barHeight = (info.period / longestPeriod) * 100;
                 return (
-                  <BarWrapper>
-                    <BarContainer />
-                    <Bar>
-                      <PeriodWrapper>
-                        <Period>{cycle + "일"}</Period>
-                      </PeriodWrapper>
-                    </Bar>
-                    <DateWrapper>
-                      <Date>{startDate}</Date>
-                    </DateWrapper>
-                  </BarWrapper>
+                  <Bar
+                    key={info.period}
+                    x={index * (barWidth + barMargin) + 20}
+                    y={chartHeight - barHeight}
+                    width={barWidth}
+                    height={
+                      info.period === longestPeriod ? chartHeight : barHeight
+                    }
+                    startDate={info.startDate}
+                    period={info.period}
+                  />
                 );
               })}
-            </svg>
+            </BarChart>
           </BarGraph>
-        </Chart>
+        </Charts>
       </Container>
     </Wrapper>
   );
@@ -87,6 +114,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   width: 600px;
   padding: 20px;
+  background: white;
 `;
 
 const Title = styled.h2`
@@ -97,7 +125,7 @@ const Title = styled.h2`
   font-weight: bold;
 `;
 
-const Chart = styled.div`
+const Charts = styled.div`
   border: 1px solid rgb(234, 234, 234);
   border-radius: 10px;
 `;
@@ -142,64 +170,15 @@ const Line = styled.div`
   margin-left: 18px;
 `;
 
-const LineGraph = styled.div`
-  position: relative;
+const LineGraphWrapper = styled.div`
+  margin-top: 60px;
+  padding-left: 50px;
 `;
 
 const BarGraph = styled.div`
   display: flex;
-  margin-top: 40px;
-  padding-left: 46.5px;
+  margin-top: 50px;
+  padding-left: 50px;
   padding-top: 20px;
   padding-bottom: 20px;
-`;
-
-const GraphLine = styled.line`
-  stroke: rgb(34, 34, 34);
-  stroke-width: 2;
-`;
-
-const GraphCircle = styled.circle`
-  fill: rgb(34, 34, 34);
-`;
-
-const BarWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  place-items: center;
-  width: 93px;
-`;
-
-const BarContainer = styled.div`
-  height: 73px;
-  width: 30px;
-`;
-
-const Bar = styled.div`
-  border-radius: 10px;
-  height: 27px;
-  width: 33px;
-  background-color: rgb(51, 51, 51);
-`;
-
-const PeriodWrapper = styled.div`
-  margin-top: -23px;
-  text-align: center;
-`;
-
-const Period = styled.span`
-  text-align: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: rgb(85, 85, 85);
-`;
-
-const DateWrapper = styled.div`
-  margin-top: 5px;
-`;
-
-const Date = styled.span`
-  font-size: 12px;
-  font-weight: 600;
-  color: rgb(85, 85, 85);
 `;

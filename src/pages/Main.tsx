@@ -28,6 +28,7 @@ const List = styled.ul`
   width: 600px;
   padding: 40px;
   list-style-type: disc;
+  background: white;
 `;
 
 const Page = styled.li`

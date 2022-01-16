@@ -82,6 +82,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   width: 600px;
   padding: 20px;
+  background: white;
 `;
 
 const Title = styled.h2`
