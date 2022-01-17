@@ -12,6 +12,10 @@ export interface data {
 }
 
 function Report(): JSX.Element {
+  const TITLE: string = "User Report";
+  const DOT_DESCRIPTION: string = "활동 주기";
+  const LINE_DESCRIPTION: string = "활동 기간, 시작일";
+
   const [data, setData] = useState<data[]>([]);
   const [lineGraphData, setLineGraphData] = useState<any>([]);
   const [longestPeriod, setLongestPeriod] = useState<number>(0);
@@ -30,7 +34,6 @@ function Report(): JSX.Element {
 
   const makeLineGraphData = (data: data[]) => {
     const longestCycle = calculateLongestCycle(data);
-
     const arr = data.map((info: any, index) => {
       const lineHeight = (info.cycle / longestCycle) * 80;
       const chartHeight = 80;
@@ -60,27 +63,27 @@ function Report(): JSX.Element {
   return (
     <Wrapper>
       <Container>
-        <Title>User Report</Title>
+        <Title>{TITLE}</Title>
         <Charts>
           <Info>
-            <Cycle>
+            <DotDescription>
               <Dot />
-              <Description>활동 주기</Description>
-            </Cycle>
-            <Start>
+              <Description>{DOT_DESCRIPTION}</Description>
+            </DotDescription>
+            <LineDescription>
               <Line />
-              <Description>활동 기간, 시작일</Description>
-            </Start>
+              <Description>{LINE_DESCRIPTION}</Description>
+            </LineDescription>
           </Info>
           <LineGraphWrapper>
             <LineGraph points={lineGraphData} data={data} />
           </LineGraphWrapper>
-          <BarGraph>
-            <BarChart height={123} width={556}>
+          <BarGraphWrapper>
+            <BarChart>
               {data.map((info, index) => {
                 const chartHeight = 100;
                 const barWidth = 30;
-                const barMargin = 78;
+                const barMargin = 70;
                 const barHeight = (info.period / longestPeriod) * 100;
                 return (
                   <Bar
@@ -97,7 +100,7 @@ function Report(): JSX.Element {
                 );
               })}
             </BarChart>
-          </BarGraph>
+          </BarGraphWrapper>
         </Charts>
       </Container>
     </Wrapper>
@@ -113,6 +116,7 @@ const Wrapper = styled.div`
 
 const Container = styled.div`
   width: 600px;
+  height: 100vh;
   padding: 20px;
   background: white;
 `;
@@ -137,48 +141,48 @@ const Info = styled.div`
   padding: 10px;
 `;
 
-const Cycle = styled.div`
+const DotDescription = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const Start = styled.div`
+const LineDescription = styled.div`
   display: flex;
   align-items: center;
 `;
 
 const Description = styled.span`
+  margin-right: 4px;
   font-size: 10px;
   color: rgb(96, 96, 96);
-  margin-right: 4px;
 `;
 
 const Dot = styled.div`
-  background-color: rgb(34, 34, 34);
   width: 7px;
   height: 7px;
-  border-radius: 14px;
   margin-right: 6px;
+  background-color: rgb(34, 34, 34);
+  border-radius: 14px;
 `;
 
 const Line = styled.div`
-  background-color: rgb(34, 34, 34);
   width: 22px;
   height: 7px;
-  border-radius: 14px;
   margin-right: 6px;
   margin-left: 18px;
+  border-radius: 14px;
+  background-color: rgb(34, 34, 34);
 `;
 
 const LineGraphWrapper = styled.div`
   margin-top: 60px;
-  padding-left: 50px;
+  padding-left: 80px;
 `;
 
-const BarGraph = styled.div`
+const BarGraphWrapper = styled.div`
   display: flex;
   margin-top: 50px;
-  padding-left: 50px;
+  padding-left: 80px;
   padding-top: 20px;
   padding-bottom: 20px;
 `;

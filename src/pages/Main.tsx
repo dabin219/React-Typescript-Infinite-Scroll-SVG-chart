@@ -2,14 +2,16 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 function Main(): JSX.Element {
+  const REPORT: string = "레포트";
+  const PASSENGER: string = "승객목록";
   return (
     <Wrapper>
       <List>
         <Link to="/report">
-          <Page>레포트</Page>
+          <Page>{REPORT}</Page>
         </Link>
         <Link to="/passenger">
-          <Page>승객목록</Page>
+          <Page>{PASSENGER}</Page>
         </Link>
       </List>
     </Wrapper>
@@ -26,13 +28,14 @@ const Wrapper = styled.div`
 
 const List = styled.ul`
   width: 600px;
-  padding: 40px;
-  list-style-type: disc;
+  height: 100vh;
+  padding: 60px;
   background: white;
 `;
 
 const Page = styled.li`
   margin: 40px 0;
+  list-style-type: disc;
   text-decoration: underline;
   font-weight: bold;
   cursor: pointer;

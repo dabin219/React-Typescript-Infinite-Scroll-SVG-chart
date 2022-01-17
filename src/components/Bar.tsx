@@ -46,14 +46,14 @@ function Bar({
 export default Bar;
 
 const Period = styled.text`
+  color: rgb(85, 85, 85);
   text-align: center;
   font-size: 12px;
   font-weight: bold;
-  color: rgb(85, 85, 85);
 `;
 
 const Date = styled.text`
+  color: rgb(85, 85, 85);
   font-size: 12px;
   font-weight: 600;
-  color: rgb(85, 85, 85);
 `;

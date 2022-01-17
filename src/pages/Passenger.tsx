@@ -1,14 +1,26 @@
 import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 
+interface airline {
+  id: number;
+  name: string;
+  country: string;
+  logo: string;
+  slogan: string;
+  head_quaters: string;
+  website: string;
+  established: string;
+}
+
 interface passenger {
   _id: string;
   name: string;
   trips: number;
-  airline: Array<any>;
+  airline: airline[];
 }
 
 function Passenger(): JSX.Element {
+  const TITLE: string = "Passenger List";
   const [page, setPage] = useState<number>(1);
   const [passengers, setPassengers] = useState<passenger[]>([]);
 
@@ -50,11 +62,11 @@ function Passenger(): JSX.Element {
   return (
     <Wrapper>
       <Container>
-        <Title>Passenger List</Title>
+        <Title>{TITLE}</Title>
         {passengers.map((passenger) => {
           const { _id, name, trips, airline } = passenger;
           return (
-            <List key={_id}>
+            <PassengerList key={_id}>
               <Info>
                 <Name>{name}</Name>
                 <Trips>{trips + " trips"}</Trips>
@@ -64,7 +76,7 @@ function Passenger(): JSX.Element {
                 <Slogan>{airline[0].slogan}</Slogan>
               </Airline>
               <Id>{_id}</Id>
-            </List>
+            </PassengerList>
           );
         })}
       </Container>
@@ -93,7 +105,7 @@ const Title = styled.h2`
   font-weight: bold;
 `;
 
-const List = styled.div`
+const PassengerList = styled.div`
   padding: 20px 0px;
   border-top: 1px solid rgb(241, 243, 249);
 `;

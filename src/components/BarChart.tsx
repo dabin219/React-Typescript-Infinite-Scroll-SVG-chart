@@ -1,13 +1,11 @@
 interface chartProps {
   children: React.ReactNode;
-  width: number;
-  height: number;
 }
 
-function BarChart({ children, width, height }: chartProps): JSX.Element {
+function BarChart({ children }: chartProps): JSX.Element {
   return (
     <svg
-      viewBox={`0 0 ${width} ${height}`}
+      viewBox={`0 -40 556 220`}
       width="100%"
       height="100%"
       preserveAspectRatio="xMidYMax meet"

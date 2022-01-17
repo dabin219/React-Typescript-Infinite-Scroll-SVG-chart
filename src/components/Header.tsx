@@ -2,11 +2,12 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 function Header(): JSX.Element {
+  const LOGO: string = "Motionlabs";
   return (
     <Wrapper>
       <Container>
         <Link to="/">
-          <Title>Motionlabs</Title>
+          <Title>{LOGO}</Title>
         </Link>
       </Container>
     </Wrapper>
