@@ -1,6 +1,4 @@
-# Motionlabs Frontend Test
-
-## 과제 목록
+# Motionlabs Frontend
 
 1. 유저 레포트 차트 페이지 구현
 2. API를 이용하여 무한 스크롤 페이지 구현
